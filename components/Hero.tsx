@@ -64,14 +64,16 @@ export function Hero() {
             ease: 'power1.inOut',
           }, 0);
 
-          // Profile card straightens from a 3D tilted state and lifts slightly
+          // Profile card straightens from a 3D tilted state, lifts slightly, and fades out
           tl.fromTo('.hero-image-wrapper', 
             {
               transform: 'perspective(1200px) rotateX(15deg) rotateY(-15deg) scale(0.9) translateZ(-60px)',
+              opacity: 1,
             },
             {
               transform: 'perspective(1200px) rotateX(0deg) rotateY(0deg) scale(1) translateZ(0px)',
               y: -30,
+              opacity: 0,
               duration: 1.5,
               ease: 'power2.out',
             },
@@ -231,38 +233,40 @@ export function Hero() {
 
           {/* Right column - Profile image */}
           <div className="lg:col-span-6 flex justify-center lg:justify-end pt-8 lg:pt-0 z-0">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              className="hero-image-wrapper relative w-full max-w-sm aspect-square"
-              style={{ transformStyle: 'preserve-3d' }}
-            >
-              {/* Main border frame */}
-              <div 
-                className="relative w-full h-full border-2 border-white bg-black overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.8)]"
-                style={{ transform: 'translateZ(20px)' }}
+            <div className="hero-image-wrapper relative w-full max-w-sm aspect-square">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
+                transition={{ delay: 0.2, duration: 0.8 }}
+                className="w-full h-full"
+                style={{ transformStyle: 'preserve-3d' }}
               >
-                {/* Inner border accent */}
-                <div className="absolute inset-0 border border-gray-800/40 m-1" />
-                
-                {/* Image container */}
-                <div className="relative w-full h-full">
-                  <Image
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/12e79e0a-3fbe-4ac4-b22e-07ed26137732.png"
-                    alt="Marutha Pandi M - Full Stack Developer"
-                    fill
-                    priority
-                    className="w-full h-full object-cover"
-                  />
+                {/* Main border frame */}
+                <div 
+                  className="relative w-full h-full border-2 border-white bg-black overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.8)]"
+                  style={{ transform: 'translateZ(20px)' }}
+                >
+                  {/* Inner border accent */}
+                  <div className="absolute inset-0 border border-gray-800/40 m-1" />
+                  
+                  {/* Image container */}
+                  <div className="relative w-full h-full">
+                    <Image
+                      src="/dev-bg.png"
+                      alt="Marutha Pandi M - Full Stack Developer"
+                      fill
+                      priority
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              {/* Accent corner lines - top right */}
-              <div className="absolute -top-3 -right-3 w-10 h-10 border-t-2 border-r-2 border-white" />
+                {/* Accent corner lines - top right */}
+                <div className="absolute -top-3 -right-3 w-10 h-10 border-t-2 border-r-2 border-white" />
 
-              {/* Accent corner lines - bottom left */}
-              <div className="absolute -bottom-3 -left-3 w-10 h-10 border-b-2 border-l-2 border-white" />
+                {/* Accent corner lines - bottom left */}
+                <div className="absolute -bottom-3 -left-3 w-10 h-10 border-b-2 border-l-2 border-white" />
+              </motion.div>
 
               {/* Professional badge */}
               <motion.div
