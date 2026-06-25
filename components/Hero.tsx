@@ -126,24 +126,28 @@ export function Hero() {
 
             {/* Main name heading */}
             <div className="space-y-1 mb-8 overflow-hidden">
-              <motion.h1
-                initial={{ opacity: 0, y: 60 }}
-                animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
-                transition={{ delay: 0.1, duration: 0.8 }}
-                className="hero-title-1 font-extrabold text-5xl md:text-8xl lg:text-9xl leading-none tracking-tighter text-white uppercase"
-                style={{ fontFamily: 'var(--font-syne)' }}
-              >
-                MARUTHA
-              </motion.h1>
-              <motion.h1
-                initial={{ opacity: 0, y: 60 }}
-                animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
-                transition={{ delay: 0.15, duration: 0.8 }}
-                className="hero-title-2 font-extrabold text-5xl md:text-8xl lg:text-9xl leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-white/80 to-white/30 uppercase"
-                style={{ fontFamily: 'var(--font-syne)' }}
-              >
-                PANDI M
-              </motion.h1>
+              <div className="hero-title-1">
+                <motion.h1
+                  initial={{ opacity: 0, y: 60 }}
+                  animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
+                  transition={{ delay: 0.1, duration: 0.8 }}
+                  className="font-extrabold text-5xl md:text-8xl lg:text-9xl leading-none tracking-tighter text-white uppercase"
+                  style={{ fontFamily: 'var(--font-syne)' }}
+                >
+                  MARUTHA
+                </motion.h1>
+              </div>
+              <div className="hero-title-2">
+                <motion.h1
+                  initial={{ opacity: 0, y: 60 }}
+                  animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
+                  transition={{ delay: 0.15, duration: 0.8 }}
+                  className="font-extrabold text-5xl md:text-8xl lg:text-9xl leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-white/80 to-white/30 uppercase"
+                  style={{ fontFamily: 'var(--font-syne)' }}
+                >
+                  PANDI M
+                </motion.h1>
+              </div>
             </div>
 
             {/* Group details wrapper for GSAP scroll fades */}
