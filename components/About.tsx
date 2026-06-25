@@ -60,31 +60,66 @@ export function About() {
   const containerRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
-    // Create GSAP context for safe React mounting/cleanup
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top top',
-          end: '+=150%', // Pins the section for 1.5x of the viewport height
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-        },
-      });
+    const container = containerRef.current;
+    if (!container) return;
 
-      // Animate sentences
-      const targets = gsap.utils.toArray('.reveal-sentence');
-      targets.forEach((target: any, idx) => {
-        tl.to(target, {
-          opacity: 1,
-          duration: 1.5,
-          ease: 'power1.out',
-        }, idx * 1.5); // Stagger sentences
-      });
-    }, containerRef);
+    let ctx: any;
 
-    return () => ctx.revert();
+    // Small delay to ensure standard React mounting is finished before setting up GSAP
+    const timer = setTimeout(() => {
+      ctx = gsap.context(() => {
+        const mm = gsap.matchMedia();
+
+        // Desktop/Tablet pinning and sentence reveal scrubbing
+        mm.add('(min-width: 768px)', () => {
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: container,
+              start: 'top top',
+              end: '+=150%', // Pins the section for 1.5x of the viewport height
+              scrub: 1,
+              pin: true,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+            },
+          });
+
+          // Animate sentences
+          const targets = gsap.utils.toArray('.reveal-sentence');
+          targets.forEach((target: any, idx) => {
+            tl.to(target, {
+              opacity: 1,
+              duration: 1.5,
+              ease: 'power1.out',
+            }, idx * 1.5); // Stagger sentences
+          });
+        });
+
+        // Mobile fallback: simple reveal on scroll without sticky pinning
+        mm.add('(max-width: 767px)', () => {
+          const targets = gsap.utils.toArray('.reveal-sentence');
+          targets.forEach((target: any) => {
+            gsap.to(target, {
+              opacity: 1,
+              duration: 1,
+              ease: 'power1.out',
+              scrollTrigger: {
+                trigger: target,
+                start: 'top 85%',
+                toggleActions: 'play none none none',
+              },
+            });
+          });
+        });
+      }, containerRef);
+
+      ScrollTrigger.refresh();
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      if (ctx) ctx.revert();
+    };
   }, []);
 
   const sentences = [
