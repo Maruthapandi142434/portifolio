@@ -12,6 +12,7 @@ const syne = Syne({
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://maruthapandi-portfolio.vercel.app'), // Update with your actual domain
   title: 'M. Marutha Pandi - Full Stack Developer | Portfolio Site',
   description: 'Full Stack Engineer specializing in Next.js, Node.js, and PERN & MERN Stack. Experienced in building scalable CRM, ERP, and E-commerce platforms with secure RBAC, containerization, and VPS hosting.',
   keywords: [
