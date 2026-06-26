@@ -75,8 +75,11 @@ export function Projects() {
       ctx = gsap.context(() => {
         const mm = gsap.matchMedia();
 
-        // 3D Sticky Stacking animation for screen width >= 768px (Desktop/Tablet)
-        mm.add('(min-width: 768px)', () => {
+        mm.add({
+          isMobile: "(max-width: 767px)",
+          isDesktop: "(min-width: 768px)"
+        }, (context) => {
+          const { isMobile } = context.conditions as any;
           const cards = gsap.utils.toArray('.project-card');
           if (cards.length <= 1) return;
 
@@ -85,17 +88,18 @@ export function Projects() {
             if (idx === cards.length - 1) return;
 
             const nextCard = cards[idx + 1] as any;
+            const endOffset = isMobile ? 'top 80px' : 'top 140px';
 
             gsap.to(card, {
               scale: 0.94 - (cards.length - idx - 2) * 0.015, // Nested stacking perspective scaling
-              opacity: 0.35,
+              opacity: isMobile ? 0.6 : 0.35,
               y: -15, // Slight vertical parallax lift
               transformOrigin: 'top center',
               ease: 'none',
               scrollTrigger: {
                 trigger: nextCard,
                 start: 'top 80%', // start shrinking card i when card i+1 starts approaching viewport top
-                end: 'top 140px', // finished shrinking card i when card i+1 hits its sticky position
+                end: endOffset, // finished shrinking card i when card i+1 hits its sticky position
                 scrub: true,
                 invalidateOnRefresh: true,
               },
@@ -141,7 +145,7 @@ export function Projects() {
                 <div className={`absolute -right-20 -bottom-20 w-80 h-80 rounded-full blur-[120px] opacity-10 pointer-events-none ${project.glowColor}`} />
 
                 {/* Decorative background outline index number */}
-                <div className="absolute top-6 right-8 text-[8rem] md:text-[11rem] font-bold text-white/[0.015] select-none pointer-events-none font-mono leading-none">
+                <div className="absolute top-6 right-8 text-[6rem] md:text-[11rem] font-bold text-white/[0.015] select-none pointer-events-none font-mono leading-none">
                   {String(idx + 1).padStart(2, '0')}
                 </div>
 
@@ -200,17 +204,9 @@ export function Projects() {
             return (
               <div
                 key={project.id}
-                className="project-card relative md:sticky md:top-[140px] md:mb-24 w-full py-2"
+                className="project-card sticky top-[80px] md:top-[140px] mb-12 md:mb-24 w-full py-2"
               >
-                {/* On mobile, we use RevealOnScroll for simple entry animation */}
-                <div className="md:hidden">
-                  <RevealOnScroll delay={idx * 0.05}>
-                    {CardContent}
-                  </RevealOnScroll>
-                </div>
-                <div className="hidden md:block">
-                  {CardContent}
-                </div>
+                {CardContent}
               </div>
             );
           })}

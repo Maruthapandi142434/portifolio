@@ -27,8 +27,14 @@ export function Hero() {
       ctx = gsap.context(() => {
         const mm = gsap.matchMedia();
 
-        // 3D Scroll Zoom & Parallax only on desktop/tablet screens >= 768px
-        mm.add('(min-width: 768px)', () => {
+        mm.add({
+          isMobile: "(max-width: 767px)",
+          isDesktop: "(min-width: 768px)"
+        }, (context) => {
+          const { isMobile } = context.conditions as any;
+          const shiftX = isMobile ? window.innerWidth * 0.4 : 180;
+          const shiftY = isMobile ? 30 : 50;
+
           const tl = gsap.timeline({
             scrollTrigger: {
               trigger: section,
@@ -42,7 +48,7 @@ export function Hero() {
 
           // Name moves left-to-right
           tl.to('.hero-title-1', {
-            x: 180,
+            x: shiftX,
             opacity: 0,
             duration: 1.5,
             ease: 'power1.inOut',
@@ -50,7 +56,7 @@ export function Hero() {
 
           // Subtitle/Role moves right-to-left
           tl.to('.hero-title-2', {
-            x: -180,
+            x: -shiftX,
             opacity: 0,
             duration: 1.5,
             ease: 'power1.inOut',
@@ -58,7 +64,7 @@ export function Hero() {
 
           // Full Stack Developer moves left-to-right
           tl.to('.hero-title-3', {
-            x: 180,
+            x: shiftX,
             opacity: 0,
             duration: 1.5,
             ease: 'power1.inOut',
@@ -66,7 +72,7 @@ export function Hero() {
 
           // Details section fades and slides down
           tl.to('.hero-details', {
-            y: 50,
+            y: shiftY,
             opacity: 0,
             duration: 1.2,
             ease: 'power1.inOut',
@@ -75,11 +81,13 @@ export function Hero() {
           // Profile card straightens from a 3D tilted state, lifts slightly, and fades out
           tl.fromTo('.hero-image-wrapper', 
             {
-              transform: 'perspective(1200px) rotateX(15deg) rotateY(-15deg) scale(0.9) translateZ(-60px)',
+              transform: isMobile 
+                ? 'perspective(1000px) rotateX(10deg) rotateY(-10deg) scale(0.95) translateZ(-30px)' 
+                : 'perspective(1200px) rotateX(15deg) rotateY(-15deg) scale(0.9) translateZ(-60px)',
               opacity: 1,
             },
             {
-              transform: 'perspective(1200px) rotateX(0deg) rotateY(0deg) scale(1.2) translateZ(0px)',
+              transform: 'perspective(1200px) rotateX(0deg) rotateY(0deg) scale(1.1) translateZ(0px)',
               y: -30,
               opacity: 0,
               duration: 1.5,
@@ -109,7 +117,7 @@ export function Hero() {
   return (
     <section 
       ref={sectionRef} 
-      className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-black px-4 md:px-8 lg:px-16"
+      className="relative w-full min-h-[100dvh] flex flex-col items-start justify-start md:justify-center overflow-hidden bg-black px-4 md:px-8 lg:px-16 pt-16 md:pt-0"
     >
       {/* Scroll indicator */}
       <motion.div
@@ -128,29 +136,9 @@ export function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Background Profile Image centerpiece */}
-      <div className="absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:left-auto md:right-0 top-[40%] -translate-y-1/2 w-full md:w-[55%] h-[60vh] md:h-[80vh] max-w-[550px] max-h-[550px] z-10 pointer-events-none flex items-center justify-center">
-        <div className="hero-image-wrapper relative w-full h-full flex items-center justify-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="relative w-full h-full flex items-center justify-center"
-          >
-            <Image
-              src="/dev-bg.png"
-              alt="Marutha Pandi M"
-              fill
-              priority
-              className="hero-parallax-img w-full h-full object-contain"
-            />
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Foreground Content */}
-      <div className="w-full select-none relative z-20 py-16 md:py-0 flex flex-col justify-center items-start min-h-screen pl-6 md:pl-16 xl:pl-24 pr-4">
-        <div className="relative flex flex-col items-start justify-center text-left w-full max-w-none">
+      {/* Foreground Content with integrated image for mobile flow */}
+      <div className="w-full select-none relative z-20 flex flex-col justify-start md:justify-center items-start pl-2 sm:pl-6 md:pl-16 xl:pl-24 pr-4 md:min-h-screen mt-4 md:mt-0">
+        <div className="relative flex flex-col items-start justify-start md:justify-center text-left w-full max-w-none">
           
           {/* Top border line */}
           <motion.div
@@ -161,13 +149,13 @@ export function Hero() {
           />
 
           {/* Name and Subtitle headings */}
-          <div className="space-y-4 w-full">
+          <div className="space-y-2 md:space-y-4 w-full">
             <div className="hero-title-1 w-full flex justify-start overflow-visible">
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                 transition={{ delay: 0.1, duration: 0.8 }}
-                className="font-extrabold text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] xl:text-[8.5rem] leading-none tracking-tighter text-white uppercase whitespace-nowrap"
+                className="font-extrabold text-[3.5rem] leading-[0.9] sm:text-7xl md:text-8xl lg:text-[7rem] xl:text-[8.5rem] tracking-tighter text-white uppercase whitespace-nowrap"
                 style={{ fontFamily: 'var(--font-syne)' }}
               >
                 MARUTHA
@@ -178,10 +166,10 @@ export function Hero() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                 transition={{ delay: 0.15, duration: 0.8 }}
-                className="font-extrabold text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] xl:text-[8.5rem] leading-none tracking-tighter text-transparent uppercase whitespace-nowrap"
+                className="font-extrabold text-[3.5rem] leading-[0.9] sm:text-7xl md:text-8xl lg:text-[7rem] xl:text-[8.5rem] tracking-tighter text-transparent uppercase whitespace-nowrap"
                 style={{ 
                   fontFamily: 'var(--font-syne)',
-                  WebkitTextStroke: '1.5px rgba(255, 255, 255, 0.25)'
+                  WebkitTextStroke: '1.5px rgba(255, 255, 255, 0.35)'
                 }}
               >
                 PANDI
@@ -192,7 +180,7 @@ export function Hero() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
-                className="font-extrabold text-xl sm:text-2xl md:text-3xl lg:text-[2.5rem] xl:text-[3rem] leading-none tracking-tighter text-white/70 uppercase whitespace-nowrap"
+                className="font-extrabold text-lg sm:text-2xl md:text-3xl lg:text-[2.5rem] xl:text-[3rem] mt-2 md:mt-0 leading-none tracking-tighter text-white/70 uppercase whitespace-nowrap"
                 style={{ 
                   fontFamily: 'var(--font-syne)'
                 }}
@@ -202,8 +190,28 @@ export function Hero() {
             </div>
           </div>
 
+          {/* Profile Image centerpiece (Flows inline on mobile, absolutely positioned on desktop) */}
+          <div className="relative md:absolute md:left-auto md:-right-8 lg:right-0 md:top-1/2 md:-translate-y-[45%] w-[110%] -ml-[5%] md:ml-0 md:w-[55%] h-[45vh] md:h-[80vh] max-w-[600px] max-h-[600px] z-10 pointer-events-none flex items-center justify-center my-2 md:my-0 self-center">
+            <div className="hero-image-wrapper relative w-full h-full flex items-center justify-center">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
+                transition={{ delay: 0.2, duration: 0.8 }}
+                className="relative w-full h-full flex items-center justify-center"
+              >
+                <Image
+                  src="/dev-bg.png"
+                  alt="Marutha Pandi M"
+                  fill
+                  priority
+                  className="hero-parallax-img w-full h-full object-contain"
+                />
+              </motion.div>
+            </div>
+          </div>
+
           {/* Sub-info block and CTA button */}
-          <div className="hero-details flex flex-col md:flex-row items-start md:items-center gap-6 mt-12 w-full justify-start">
+          <div className="hero-details flex flex-col md:flex-row items-start md:items-center gap-6 mt-4 md:mt-12 w-full justify-start relative z-30">
             <div className="flex items-center gap-3 bg-white/5 border border-white/10 backdrop-blur-md px-6 py-3 rounded-full">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span className="text-[10px] md:text-xs font-mono tracking-widest text-white/70 uppercase">

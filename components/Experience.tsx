@@ -51,8 +51,11 @@ export function Experience() {
       ctx = gsap.context(() => {
         const mm = gsap.matchMedia();
 
-        // Only run sticky card transition stack on desktop
-        mm.add('(min-width: 768px)', () => {
+        mm.add({
+          isMobile: "(max-width: 767px)",
+          isDesktop: "(min-width: 768px)"
+        }, (context) => {
+          const { isMobile } = context.conditions as any;
           const cards = gsap.utils.toArray('.experience-card');
           if (cards.length <= 1) return;
 
@@ -161,7 +164,7 @@ export function Experience() {
           </div>
 
           {/* Right Content Area (Mobile stacks vertically, Desktop stacks absolutely) */}
-          <div className="md:col-span-7 relative flex flex-col md:block md:h-[620px] w-full">
+          <div className="md:col-span-7 relative block h-[80vh] md:h-[620px] w-full pt-8 md:pt-0">
             {experiences.map((exp, idx) => {
               const CardContent = (
                 <SpotlightCard className="p-8 md:p-10 min-h-[460px] flex flex-col justify-between shadow-[0_12px_40px_rgba(0,0,0,0.8)] border border-white/5 md:border-white/10">
@@ -208,18 +211,10 @@ export function Experience() {
               return (
                 <div
                   key={idx}
-                  className="experience-card relative md:absolute md:top-0 md:left-0 w-full mb-8 md:mb-0"
+                  className="experience-card absolute top-0 md:top-0 left-0 w-full mb-8 md:mb-0"
                   style={{ zIndex: experiences.length - idx }}
                 >
-                  {/* On mobile, wrap in RevealOnScroll. On desktop, render directly to avoid library conflicts */}
-                  <div className="md:hidden">
-                    <RevealOnScroll delay={idx * 0.1}>
-                      {CardContent}
-                    </RevealOnScroll>
-                  </div>
-                  <div className="hidden md:block">
-                    {CardContent}
-                  </div>
+                  {CardContent}
                 </div>
               );
             })}

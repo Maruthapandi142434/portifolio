@@ -115,8 +115,10 @@ export function TechExpertise() {
       ctx = gsap.context(() => {
         const mm = gsap.matchMedia();
 
-        // Only pin and horizontal-scroll on screens >= 768px
-        mm.add('(min-width: 768px)', () => {
+        mm.add({
+          isMobile: "(max-width: 767px)",
+          isDesktop: "(min-width: 768px)"
+        }, (context) => {
           const getScrollAmount = () => track.scrollWidth - window.innerWidth;
 
           gsap.to(track, {
@@ -177,10 +179,10 @@ export function TechExpertise() {
 
       <div
         ref={trackRef}
-        className="flex flex-col md:flex-row h-auto md:h-screen md:w-max w-full items-stretch md:items-center gap-12 md:gap-24 px-6 md:px-24 py-20 md:py-0"
+        className="flex flex-row h-[100dvh] w-max items-center gap-12 md:gap-24 px-6 md:px-24"
       >
         {/* Intro Slide */}
-        <div className="w-full md:w-[75vw] lg:w-[60vw] max-w-[800px] shrink-0 flex flex-col justify-center h-full min-h-[400px] md:min-h-0 select-none">
+        <div className="w-[85vw] md:w-[75vw] lg:w-[60vw] max-w-[800px] shrink-0 flex flex-col justify-center h-full select-none">
           <span className="text-xs text-gray-500 font-mono tracking-[0.2em] uppercase mb-4">
             Domain Competence
           </span>
@@ -208,13 +210,13 @@ export function TechExpertise() {
           const panelNum = String(idx + 1).padStart(2, '0');
 
           return (
-            <div
+              <div
               key={idx}
-              className="w-full md:w-[75vw] lg:w-[60vw] max-w-[900px] shrink-0 flex flex-col justify-center h-full py-6 md:py-0"
+              className="w-[85vw] md:w-[75vw] lg:w-[60vw] max-w-[900px] shrink-0 flex flex-col justify-center h-full py-6 md:py-0"
             >
-              <SpotlightCard className="p-8 md:p-12 min-h-[480px] md:min-h-[520px] flex flex-col justify-between relative shadow-[0_12px_40px_rgba(0,0,0,0.8)] border border-white/5 md:border-white/10">
+              <SpotlightCard className="p-6 md:p-12 min-h-[480px] md:min-h-[520px] flex flex-col justify-between relative shadow-[0_12px_40px_rgba(0,0,0,0.8)] border border-white/5 md:border-white/10">
                 {/* Huge decorative number in background */}
-                <div className="absolute -top-6 -right-6 text-[10rem] md:text-[14rem] font-bold text-white/[0.02] select-none pointer-events-none font-mono">
+                <div className="absolute -top-4 -right-4 md:-top-6 md:-right-6 text-[8rem] md:text-[14rem] font-bold text-white/[0.02] select-none pointer-events-none font-mono">
                   {panelNum}
                 </div>
 

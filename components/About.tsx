@@ -70,13 +70,17 @@ export function About() {
       ctx = gsap.context(() => {
         const mm = gsap.matchMedia();
 
-        // Desktop/Tablet pinning and sentence reveal scrubbing
-        mm.add('(min-width: 768px)', () => {
+        mm.add({
+          isMobile: "(max-width: 767px)",
+          isDesktop: "(min-width: 768px)"
+        }, (context) => {
+          const { isMobile } = context.conditions as any;
+          
           const tl = gsap.timeline({
             scrollTrigger: {
               trigger: container,
               start: 'top top',
-              end: '+=150%', // Pins the section for 1.5x of the viewport height
+              end: isMobile ? '+=100%' : '+=150%',
               scrub: 1,
               pin: true,
               anticipatePin: 1,
@@ -91,24 +95,7 @@ export function About() {
               opacity: 1,
               duration: 1.5,
               ease: 'power1.out',
-            }, idx * 1.5); // Stagger sentences
-          });
-        });
-
-        // Mobile fallback: simple reveal on scroll without sticky pinning
-        mm.add('(max-width: 767px)', () => {
-          const targets = gsap.utils.toArray('.reveal-sentence');
-          targets.forEach((target: any) => {
-            gsap.to(target, {
-              opacity: 1,
-              duration: 1,
-              ease: 'power1.out',
-              scrollTrigger: {
-                trigger: target,
-                start: 'top 85%',
-                toggleActions: 'play none none none',
-              },
-            });
+            }, idx * (isMobile ? 1.0 : 1.5)); 
           });
         });
       }, containerRef);
@@ -133,10 +120,10 @@ export function About() {
       {/* Scroll track for GSAP sticky pinning */}
       <div ref={containerRef} className="relative w-full">
         {/* Sticky content wrapper */}
-        <div className="h-screen w-full flex flex-col justify-center px-6 md:px-12 lg:px-24 max-w-5xl mx-auto overflow-hidden">
+        <div className="h-[100dvh] w-full flex flex-col justify-center px-6 md:px-12 lg:px-24 max-w-5xl mx-auto overflow-hidden">
           <RevealOnScroll>
             <h2
-              className="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-8 md:mb-12 tracking-tight"
+              className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 md:mb-12 tracking-tight"
               style={{ fontFamily: 'var(--font-syne)' }}
             >
               ABOUT
@@ -180,7 +167,7 @@ export function About() {
             {/* Left: Education Card (col-span-7) */}
             <div className="md:col-span-7">
               <RevealOnScroll delay={0.1}>
-                <SpotlightCard className="p-8 md:p-10 min-h-[380px] h-full flex flex-col justify-between relative overflow-hidden group/edu">
+                <SpotlightCard className="p-6 sm:p-8 md:p-10 min-h-[380px] h-full flex flex-col justify-between relative overflow-hidden group/edu">
                   {/* Faint ambient glow */}
                   <div className="absolute -right-10 -bottom-10 w-60 h-60 rounded-full blur-[100px] opacity-10 bg-white pointer-events-none group-hover/edu:opacity-15 transition-opacity duration-500" />
                   
@@ -235,7 +222,7 @@ export function About() {
             {/* Right: Mindset Card (col-span-5) */}
             <div className="md:col-span-5">
               <RevealOnScroll delay={0.2}>
-                <SpotlightCard className="p-8 md:p-10 min-h-[380px] h-full flex flex-col justify-between relative overflow-hidden group/mind">
+                <SpotlightCard className="p-6 sm:p-8 md:p-10 min-h-[380px] h-full flex flex-col justify-between relative overflow-hidden group/mind">
                   <div className="absolute -right-10 -bottom-10 w-60 h-60 rounded-full blur-[100px] opacity-10 bg-white pointer-events-none group-hover/mind:opacity-15 transition-opacity duration-500" />
 
                   <div className="space-y-6">
