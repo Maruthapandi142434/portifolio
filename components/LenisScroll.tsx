@@ -26,7 +26,8 @@ export function LenisScroll({ children }: LenisScrollProps) {
         duration: 1.2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
-        syncTouch: false,
+        syncTouch: true,
+        touchMultiplier: 2,
       });
 
       // Synchronize Lenis scroll with GSAP ScrollTrigger updates
